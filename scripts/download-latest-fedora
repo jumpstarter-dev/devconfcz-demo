@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+IMG_PATH=dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Server/aarch64/images/
+CACHE="./images"
+wget "https://${IMG_PATH}" -np -m -A '*raw.xz' -P "${CACHE}"
+# use the latest compose image
+LATEST_IMG=$(ls -Art "${CACHE}/${IMG_PATH}"/*.raw.xz | tail -n 1)
+
+echo "Latest image: ${LATEST_IMG}"
+
+# calculate full path to LATEST_IMG
+LATEST_IMG_FULLPATH=$(readlink -f ${LATEST_IMG})
+EXISTING_LINK=$(readlink "${CACHE}/latest.raw.xz" || true )
+# if the link has changed, update the link
+if [[ "${LATEST_IMG_FULLPATH}" != "${EXISTING_LINK}" ]]; then
+    echo "Updating link from latest.raw.xz -> ${LATEST_IMG}"
+    ln -fs "${LATEST_IMG_FULLPATH}" "${CACHE}/latest.raw.xz"
+else
+    echo "We are up-to-date."
+fi
