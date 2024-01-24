@@ -1,0 +1,62 @@
+name: "Setup latest.raw in DUT disk"
+selector:
+  - rpi4
+
+expect-timeout: 100
+
+steps:
+  - power: "off"
+  - set-disk-image:
+      image: "images/latest.raw"
+  - storage: "attach"
+  - power: "on"
+  - expect:
+      this: "Booting"
+
+  - expect:
+      this: "Please make a selection from the above"
+  
+  - send:
+      this:
+        - "4\n"
+  - expect:
+      this: "Password:"
+  
+  - send:
+      this:
+        - "changeme\n"
+        - "changeme\n"
+        - "yes\n"
+  
+  - expect:
+      this: "Please make a selection from the above"
+  
+  - send:
+      this:
+        - "c\n"
+
+  - expect:
+      this: "login: "
+  
+  - send:
+      this:
+        - "root\n"
+
+  - expect:
+      this: "Password:"
+  
+  - send:
+      this:
+        - "changeme\n"
+
+  - expect:
+      this: "#"
+
+  - send:
+      this:
+        - "dnf install -y tpm2-tools tpm2-pkcs11 tpm2-tss tpm2-tss-devel tpm2-tss-engine tpm2-tss-engine-utilities\n"
+  
+  - expect:
+      this: "Complete!"
+      timeout: 500
+  

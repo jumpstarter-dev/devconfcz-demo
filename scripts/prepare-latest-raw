@@ -3,7 +3,12 @@
 sudo sed -i 's/rhgb quiet/rhgb console=ttyS0,115200/g' mnt/boot/loader/entries/* mnt/etc/default/grub mnt/etc/kernel/cmdline
 # assign changeme password to root
 sudo sed -i 's%root:!locked::0:99999:7:::%root:$y$j9T$Sw1lg2a7i/0vWoufwxYsSzAk$RrdQ6C4bUsOE3uy0mErsbOA7LOF4x2R8zP5XW6jpA1/::0:99999:7:::%g' mnt/etc/shadow
-sudo sed -i 's%root:!locked:19739:0:99999:7:::%root:$y$j9T$Sw1lg2a7i/0vWoufwxYsSzAk$RrdQ6C4bUsOE3uy0mErsbOA7LOF4x2R8zP5XW6jpA1/:19740:0:99999:7:::%g' mnt/etc/shadow-
-sudo rm -f mnt/etc/systemd/system/*/initial-setup.service
+#sudo rm -f mnt/etc/systemd/system/*/initial-setup.service
+sudo rm -f mnt/etc/systemd/system/*/smartd.service
+# enable SPI and the TPM we use in the dtbs
+cat << EOF | sudo tee -a mnt/boot/efi/config.txt
+dtparam=spi=on
+dtoverlay=tpm-slb9670
+EOF
 sudo rm -f mnt/etc/.pwd.lock
 

@@ -2,7 +2,7 @@
 set -e
 IMG_PATH=dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Server/aarch64/images/
 CACHE="./images"
-wget "https://${IMG_PATH}" -np -m -A '*raw.xz' -P "${CACHE}"
+wget "https://${IMG_PATH}" -np -m -A '*raw.xz' -c -P "${CACHE}"
 # use the latest compose image
 LATEST_IMG=$(ls -Art "${CACHE}/${IMG_PATH}"/*.raw.xz | tail -n 1)
 
