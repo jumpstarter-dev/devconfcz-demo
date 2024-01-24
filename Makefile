@@ -27,7 +27,7 @@ power-off:
 download-image:
 	scripts/download-latest-fedora
 
-prepare-image: image/latest.raw mount
+prepare-image: images/latest.raw mount
 	scripts/prepare-latest-raw
 	touch images/.prepared
 	umount mnt
@@ -40,7 +40,7 @@ images/latest.raw.xz:
 	
 images/latest.raw: images/latest.raw.xz
 	xz -d -v -T0 -k $^
-	rm images/.prepared
+	rm -f images/.prepared
 
 ###############################################################################
 # Image manipulation targets
