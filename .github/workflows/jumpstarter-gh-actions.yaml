@@ -20,5 +20,11 @@ jobs:
       - name: List devices
         run: jumpstarter list-devices
 
+      - name: Download images
+        run: make download-image
+
+      - name: Prepare image
+        run: make prepare-image
+
       - name: Test in Hardware
         run: make test-in-hardware
