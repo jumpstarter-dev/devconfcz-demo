@@ -40,7 +40,16 @@ images/latest.raw.xz:
 	
 images/latest.raw: images/latest.raw.xz
 	xz -d -v -T0 -k $^
+	touch images/latest.raw
 	rm -f images/.prepared
+
+clean-image:
+	rm -f images/.prepared
+	rm -f images/latest.raw
+
+clean-images: clean-image
+	rm -rf images/dl.fedoraproject.org
+	rm -rf images/latest.raw.xz
 
 ###############################################################################
 # Image manipulation targets

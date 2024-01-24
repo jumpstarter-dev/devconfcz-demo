@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   test-in-hardware:
-    runs-on: [self-hosted, linux]
+    runs-on: [self-hosted, linux, jumpstarter-rpi4]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
