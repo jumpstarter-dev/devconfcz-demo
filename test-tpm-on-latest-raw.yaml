@@ -41,6 +41,7 @@ steps:
   - send:
       this:
         - "root\n"
+      echo: false
 
   - expect:
       this: "Password:"
