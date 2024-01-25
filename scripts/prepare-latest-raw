@@ -1,4 +1,5 @@
 #!/bin/sh
+set -x
 
 sudo sed -i 's/rhgb quiet/rhgb console=ttyS0,115200/g' mnt/boot/loader/entries/* mnt/etc/default/grub mnt/etc/kernel/cmdline
 # assign changeme password to root
