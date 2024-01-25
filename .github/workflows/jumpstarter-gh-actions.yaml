@@ -16,7 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      - name: Look at env
+        run: env
       - name: List devices
         run: jumpstarter list-devices
 
