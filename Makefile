@@ -5,10 +5,10 @@ DEVICE=rpi4-00
 ###############################################################################
 
 test-in-hardware: umount images/latest.raw images/.prepared
-	jumpstarter run-script test-tpm-on-latest-raw.yaml
+	sudo -E jumpstarter run-script test-tpm-on-latest-raw.yaml
 
 write-image: umount images/latest.raw images/.prepared
-	jumpstarter run-script setup-latest-raw.yaml
+	sudo -E jumpstarter run-script setup-latest-raw.yaml
 
 power-on:
 	jumpstarter power on -a $(DEVICE)
