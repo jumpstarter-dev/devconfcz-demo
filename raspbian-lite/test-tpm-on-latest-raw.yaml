@@ -1,0 +1,71 @@
+name: "Setup latest.raw in DUT disk"
+selector:
+  - rpi4
+
+expect-timeout: 100
+
+steps:
+  - power: "off"
+  - set-disk-image:
+      image: "images/latest.raw"
+  - storage: "attach"
+  - power: "on"
+  - expect:
+      this: "Booting"
+
+  - expect:
+      timeout: 600
+      this: "rpitest login:"
+  
+  - send:
+      this:
+        - "root\n"
+      echo: false
+
+  - expect:
+      this: "Password:"
+  
+  - send:
+      this:
+        - "changeme\n"
+
+  - expect:
+      timeout: 60
+      this: "@rpitest:~#"
+
+  - send:
+      this:
+        - "apt-get install -y tpm2-tools\n"
+  
+  - expect:
+      timeout: 200
+      this: "@rpitest:~#"
+
+  - comment: "Verifying TPM interactions via tpm2 tools"
+  - send:
+      this:
+        - "tpm2_createprimary -C e -c primary.ctx\n"
+        - "tpm2_create -G rsa -u key.pub -r key.priv -C primary.ctx\n"
+        - "tpm2_load -C primary.ctx -u key.pub -r key.priv -c key.ctx\n"
+        - "echo my message > message.dat\n"
+        - "tpm2_sign -c key.ctx -g sha256 -o sig.rssa message.dat\n"
+        - "tpm2_verifysignature -c key.ctx -g sha256 -s sig.rssa -m message.dat\n"
+        - "echo result: $?\n"
+      
+  - expect:
+      this: "value: fixedtpm|fixedparent|sensitivedataorigin|userwithauth|restricted|decrypt"
+  - expect:
+      this: "fixedtpm|fixedparent|sensitivedataorigin|userwithauth|decrypt|sign"
+  - expect:
+      this: "name: "
+  - expect:
+      this: "result: 0"
+  - expect:
+      this: "@rpitest:~#"
+cleanup:
+  - send:
+      this:
+        - "poweroff\n"
+  - pause: 10
+  - power: "off"
+

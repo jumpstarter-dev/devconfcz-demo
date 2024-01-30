@@ -11,8 +11,37 @@ permissions:
   pull-requests: read
 
 jobs:
-  test-in-hardware:
+  test-in-hardware-raspbian-lite:
     runs-on: [self-hosted, linux, jumpstarter-rpi4]
+    defaults:
+      run:
+        working-directory: ./raspbian-lite
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Worker local cache
+        run: |
+          mkdir -p $HOME/.cache/downloads.raspberrypi.org
+          ln -s $HOME/.cache/downloads.raspberrypi.org images/downloads.raspberrypi.org
+
+      - name: List devices
+        run: jumpstarter list-devices
+
+      - name: Download images
+        run: make download-image
+
+      - name: Prepare image
+        run: make prepare-image
+
+      - name: Test in Hardware
+        run: make test-in-hardware
+
+  test-in-hardware-fedora-rawhide:
+    runs-on: [self-hosted, linux, jumpstarter-rpi4]
+    defaults:
+      run:
+        working-directory: ./fedora-rawhide
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,3 +62,4 @@ jobs:
 
       - name: Test in Hardware
         run: make test-in-hardware
+

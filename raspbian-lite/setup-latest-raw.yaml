@@ -1,0 +1,9 @@
+name: "Setup latest.raw in DUT disk"
+selector:
+  - rpi4
+
+steps:
+  - power: "off"
+  - set-disk-image:
+      image: "images/latest.raw"
+  - storage: "attach"
