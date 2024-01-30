@@ -17,6 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Worker local cache
+        run: |
+          mkdir -p $HOME/.cache/dl.fedoraproject.org
+          ln -s $HOME/.cache/dl.fedoraproject.org images/dl.fedoraproject.org
+
       - name: List devices
         run: jumpstarter list-devices
 

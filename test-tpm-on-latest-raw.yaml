@@ -60,4 +60,11 @@ steps:
   - expect:
       this: "Complete!"
       timeout: 500
-  
+
+cleanup:
+  - send:
+      this:
+        - "poweroff\n"
+  - pause: 20
+  - power: "off"
+
