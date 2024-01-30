@@ -1,4 +1,9 @@
-images/latest.raw
-images/latest.raw.xz
-images/.prepared
-images/dl.fedoraproject.org/**
+fedora-rawhide/images/latest.raw
+fedora-rawhide/images/latest.raw.xz
+fedora-rawhide/images/.prepared
+fedora-rawhide/images/dl.fedoraproject.org/**
+
+raspbian-lite/images/latest.raw
+raspbian-lite/images/latest.raw.xz
+raspbian-lite/images/.prepared
+raspbian-lite/images/downloads.raspberrypi.org/**
