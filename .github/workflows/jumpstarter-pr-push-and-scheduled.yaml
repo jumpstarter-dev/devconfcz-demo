@@ -1,4 +1,4 @@
-name: "Test Jumpstarter workflow"
+name: "Test in Hardware"
 on:
   workflow_dispatch:
   push:
@@ -13,7 +13,7 @@ permissions:
   pull-requests: read
 
 jobs:
-  test-in-hardware-raspbian-lite:
+  raspbian-lite:
     runs-on: [self-hosted, linux, jumpstarter-rpi4]
     defaults:
       run:
@@ -39,7 +39,7 @@ jobs:
       - name: Test in Hardware
         run: make test-in-hardware
 
-  test-in-hardware-fedora-rawhide:
+  fedora-rawhide:
     runs-on: [self-hosted, linux, jumpstarter-rpi4]
     defaults:
       run:
