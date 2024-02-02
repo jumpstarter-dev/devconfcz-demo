@@ -37,7 +37,7 @@ jobs:
         run: make prepare-image
 
       - name: Test in Hardware
-        run: make test-in-hardware
+        run: sudo -E jumpstarter run-script setup-latest-raw.yaml
 
   fedora-rawhide:
     runs-on: [self-hosted, linux, jumpstarter-rpi4]
@@ -63,5 +63,5 @@ jobs:
         run: make prepare-image
 
       - name: Test in Hardware
-        run: make test-in-hardware
+        run: sudo -E jumpstarter run-script setup-latest-raw.yaml
 
