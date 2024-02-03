@@ -27,7 +27,6 @@ EOF
 
 cat << EOF | sudo tee -a mnt/boot/firmware/config.txt
 dtparam=spi=on
-dtoverlay=tpm-slb9670
 enable_uart=1
 EOF
 
