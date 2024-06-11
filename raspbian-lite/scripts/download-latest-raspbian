@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
-LATEST_URL=$(wget -O /dev/null -o - --max-redirect=0 https://downloads.raspberrypi.org/raspios_lite_armhf_latest 2>/dev/null| sed -n "s/^Location: \(.*\) \[following\]$/\1/p")
+#LATEST_URL=$(wget -O /dev/null -o - --max-redirect=0 https://downloads.raspberrypi.org/raspios_lite_armhf_latest 2>/dev/null| sed -n "s/^Location: \(.*\) \[following\]$/\1/p")
+LATEST_URL=$(curl https://downloads.raspberrypi.org/raspios_lite_armhf_latest -v 2>&1 | sed -n "s/< location: \(.*\)\r$/\1/p")
+echo $LATEST_URL
 CACHE="./images"
 wget "${LATEST_URL}" -np -m -A '*img.xz' -c -P "${CACHE}"
 # use the latest compose image
