@@ -1,0 +1,93 @@
+name: "Setup latest.raw in DUT disk"
+selector:
+  - rpi4
+
+expect-timeout: 100
+
+steps:
+  - power: "off"
+  - set-disk-image:
+      image: "images/latest.raw"
+  - storage: "attach"
+  - power: "on"
+  - expect:
+      this: "Booting"
+
+  - expect:
+      this: "Please make a selection from the above"
+  
+  - send:
+      this:
+        - "4\n"
+  - expect:
+      this: "Password:"
+  
+  - send:
+      this:
+        - "changeme\n"
+        - "changeme\n"
+        - "yes\n"
+      echo: false
+  
+  - expect:
+      this: "Please make a selection from the above"
+  
+  - send:
+      this:
+        - "c\n"
+
+  - expect:
+      this: "login: "
+  
+  - send:
+      this:
+        - "root\n"
+      echo: false
+
+  - expect:
+      this: "Password:"
+  
+  - send:
+      this:
+        - "changeme\n"
+
+  - expect:
+      this: "#"
+
+  - send:
+      this:
+        - "dnf install -y tpm2-tools tpm2-pkcs11 tpm2-tss tpm2-tss-devel tpm2-tss-engine tpm2-tss-engine-utilities\n"
+  
+  - expect:
+      this: "Complete!"
+      timeout: 500
+
+  - comment: "Verifying TPM interactions via tpm2 tools"
+  - send:
+      this:
+        - "tpm2_createprimary -C e -c primary.ctx\n"
+        - "tpm2_create -G rsa -u key.pub -r key.priv -C primary.ctx\n"
+        - "tpm2_load -C primary.ctx -u key.pub -r key.priv -c key.ctx\n"
+        - "echo my message > message.dat\n"
+        - "tpm2_sign -c key.ctx -g sha256 -o sig.rssa message.dat\n"
+        - "tpm2_verifysignature -c key.ctx -g sha256 -s sig.rssa -m message.dat\n"
+        - "echo result: $?\n"
+      
+  - expect:
+      this: "value: fixedtpm|fixedparent|sensitivedataorigin|userwithauth|restricted|decrypt"
+  - expect:
+      this: "fixedtpm|fixedparent|sensitivedataorigin|userwithauth|decrypt|sign"
+  - expect:
+      this: "name: "
+  - expect:
+      this: "result: 0"
+  - expect:
+      this: "# "
+
+cleanup:
+  - send:
+      this:
+        - "poweroff\n"
+  - pause: 20
+  - power: "off"
+
